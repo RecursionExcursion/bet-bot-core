@@ -22,10 +22,10 @@ type PackagedPlayer struct {
 }
 
 type StatCalculator struct {
-	fsd internal.FirstShotData
+	fsd FirstShotData
 }
 
-func NewStatCalculator(fsd internal.FirstShotData) *StatCalculator {
+func NewStatCalculator(fsd FirstShotData) *StatCalculator {
 
 	filteredGames := []internal.Game{}
 
@@ -162,7 +162,7 @@ func (sc *StatCalculator) findPlayerById(id string) (*internal.Player, error) {
 	return &player, fmt.Errorf("player %v not found", id)
 }
 
-func FindGameInFsd(fsd internal.FirstShotData, id string) (internal.Game, error) {
+func FindGameInFsd(fsd FirstShotData, id string) (internal.Game, error) {
 	for _, g := range fsd.Games {
 		if g.Id == id {
 			return g, nil

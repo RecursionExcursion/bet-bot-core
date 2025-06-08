@@ -2,32 +2,13 @@ package internal
 
 /* DB data shape */
 
-type CompressedFsData struct {
-	Id      string `json:"id"`
-	Created int64  `json:"created"`
-	Data    string `json:"data"`
-}
-
-type FirstShotData struct {
-	Created int64  `json:"created"`
-	Teams   []team `json:"teams"`
-	Games   []Game `json:"games"`
-}
-
-type User struct {
-	MId      string `json:"_id"`
-	Id       string `json:"id"`
-	Username string `json:"username"`
-	Password string `json:"password"`
-}
-
 /* ESPN NBA API Payloads */
 
 type teamFetchPayload struct {
 	Sports []struct {
 		Leagues []struct {
 			Teams []struct {
-				Team team `json:"team"`
+				Team Team `json:"team"`
 			} `json:"teams"`
 		} `json:"leagues"`
 	} `json:"sports"`
@@ -65,7 +46,7 @@ type gameDataFetchPayload struct {
 
 /* Team & Player  */
 
-type team struct {
+type Team struct {
 	Id             string `json:"id"`
 	Uid            string `json:"uid"`
 	Name           string `json:"name"`

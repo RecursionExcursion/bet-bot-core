@@ -8,7 +8,7 @@ import (
 	"github.com/RecursionExcursion/go-toolkit/core"
 )
 
-func CollectTeamsAndRosters() ([]team, error) {
+func CollectTeamsAndRosters() ([]Team, error) {
 
 	teams, err := fetchTeams()
 	if err != nil {
@@ -23,7 +23,7 @@ func CollectTeamsAndRosters() ([]team, error) {
 	return teams, nil
 }
 
-func fetchTeams() ([]team, error) {
+func fetchTeams() ([]Team, error) {
 	tfp, _, err := core.FetchAndMap[teamFetchPayload](
 		func() (*http.Response, error) {
 			return http.Get(endpoints().Teams())
@@ -31,7 +31,7 @@ func fetchTeams() ([]team, error) {
 	if err != nil {
 		return nil, err
 	}
-	teams := []team{}
+	teams := []Team{}
 
 	for _, t := range tfp.Sports[0].Leagues[0].Teams {
 		teams = append(teams, t.Team)
@@ -40,7 +40,7 @@ func fetchTeams() ([]team, error) {
 	return teams, nil
 }
 
-func compileRosterAsync(teams *[]team) error {
+func compileRosterAsync(teams *[]Team) error {
 	type RosterChannel struct {
 		teamId string
 		roster []Player
