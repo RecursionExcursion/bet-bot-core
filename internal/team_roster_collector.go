@@ -1,13 +1,14 @@
 package internal
 
 import (
-	"github.com/RecursionExcursion/go-toolkit/core"
 	"log"
 	"net/http"
 	"sync"
+
+	"github.com/RecursionExcursion/go-toolkit/core"
 )
 
-func collectTeamsAndRosters() ([]team, error) {
+func CollectTeamsAndRosters() ([]team, error) {
 
 	teams, err := fetchTeams()
 	if err != nil {
@@ -42,7 +43,7 @@ func fetchTeams() ([]team, error) {
 func compileRosterAsync(teams *[]team) error {
 	type RosterChannel struct {
 		teamId string
-		roster []player
+		roster []Player
 		err    error
 	}
 
@@ -65,7 +66,7 @@ func compileRosterAsync(teams *[]team) error {
 			if err != nil {
 				rChan <- RosterChannel{
 					teamId: teamId,
-					roster: []player{},
+					roster: []Player{},
 					err:    err,
 				}
 				return

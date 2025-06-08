@@ -1,10 +1,13 @@
 package internal
 
 import (
+	"errors"
 	"fmt"
 	"log"
 	"sort"
 	"strconv"
+
+	"github.com/RecursionExcursion/bet-bot-core/internal"
 )
 
 type PackagedPlayer struct {
@@ -19,12 +22,12 @@ type PackagedPlayer struct {
 }
 
 type StatCalculator struct {
-	fsd FirstShotData
+	fsd internal.FirstShotData
 }
 
-func NewStatCalculator(fsd FirstShotData) *StatCalculator {
+func NewStatCalculator(fsd internal.FirstShotData) *StatCalculator {
 
-	filteredGames := []game{}
+	filteredGames := []internal.Game{}
 
 	for _, g := range fsd.Games {
 		if g.Season.Slug == "preseason" {
@@ -146,8 +149,8 @@ func (sc *StatCalculator) packageData() []PackagedPlayer {
 	return packagedPlayers
 }
 
-func (sc *StatCalculator) findPlayerById(id string) (*player, error) {
-	var player player
+func (sc *StatCalculator) findPlayerById(id string) (*internal.Player, error) {
+	var player internal.Player
 
 	for _, t := range sc.fsd.Teams {
 		for i := range t.Roster {
@@ -157,4 +160,24 @@ func (sc *StatCalculator) findPlayerById(id string) (*player, error) {
 		}
 	}
 	return &player, fmt.Errorf("player %v not found", id)
+}
+
+func FindGameInFsd(fsd internal.FirstShotData, id string) (internal.Game, error) {
+	for _, g := range fsd.Games {
+		if g.Id == id {
+			return g, nil
+		}
+	}
+	var g internal.Game
+	return g, errors.New("game not found")
+}
+
+func FindGame(games []internal.Game, id string) (internal.Game, error) {
+	for _, g := range games {
+		if g.Id == id {
+			return g, nil
+		}
+	}
+	var g internal.Game
+	return g, errors.New("game not found")
 }

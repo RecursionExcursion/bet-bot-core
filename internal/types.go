@@ -11,7 +11,7 @@ type CompressedFsData struct {
 type FirstShotData struct {
 	Created int64  `json:"created"`
 	Teams   []team `json:"teams"`
-	Games   []game `json:"games"`
+	Games   []Game `json:"games"`
 }
 
 type User struct {
@@ -34,7 +34,7 @@ type teamFetchPayload struct {
 }
 
 type rosterFetchPayload struct {
-	Athletes []player `json:"athletes"`
+	Athletes []Player `json:"athletes"`
 }
 
 type seasonInfoPayload struct {
@@ -53,7 +53,7 @@ type seasonGamesFetchPayload struct {
 
 // Needed bc playByPlay is nested in event, but we want it flat in Game obj
 type rawGameWrapper struct {
-	game
+	Game
 	Competitions []struct {
 		PlayByPlayAvailable bool `json:"playByPlayAvailable"`
 	} `json:"competitions"`
@@ -75,10 +75,10 @@ type team struct {
 	Logos          []struct {
 		Href string `json:"href"`
 	} `json:"logos"`
-	Roster []player `json:"roster"`
+	Roster []Player `json:"roster"`
 }
 
-type player struct {
+type Player struct {
 	Id          string       `json:"id"`
 	Uid         string       `json:"uid"`
 	Guid        string       `json:"guid"`
@@ -111,7 +111,7 @@ type betStats struct {
 
 /* Game */
 
-type game struct {
+type Game struct {
 	Id            string        `json:"id"`
 	Uid           string        `json:"uid"`
 	Date          string        `json:"date"`

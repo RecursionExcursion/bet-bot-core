@@ -10,7 +10,7 @@ import (
 	"github.com/RecursionExcursion/go-toolkit/core"
 )
 
-func collectGames() ([]game, error) {
+func CollectGames() ([]Game, error) {
 	now := time.Now()
 
 	var year int
@@ -30,7 +30,7 @@ func collectGames() ([]game, error) {
 	return games, nil
 }
 
-func collectSeasonGames(year int) ([]game, error) {
+func collectSeasonGames(year int) ([]Game, error) {
 
 	ranges, err := fetchSeasonInfo(year)
 	if err != nil {
@@ -97,7 +97,7 @@ func fetchSeasonInfo(year int) (tr TimeRange, err error) {
 	return tr, nil
 }
 
-func fetchSeasonGamesAsync(start time.Time, end time.Time) ([]game, error) {
+func fetchSeasonGamesAsync(start time.Time, end time.Time) ([]Game, error) {
 
 	var curr = start
 	eps := []string{}
@@ -109,7 +109,7 @@ func fetchSeasonGamesAsync(start time.Time, end time.Time) ([]game, error) {
 		curr = curr.AddDate(0, 0, 1)
 	}
 
-	gChan := make(chan []game, len(eps))
+	gChan := make(chan []Game, len(eps))
 	tasks := []func(){}
 	for _, ep := range eps {
 
@@ -123,13 +123,13 @@ func fetchSeasonGamesAsync(start time.Time, end time.Time) ([]game, error) {
 
 			if err != nil {
 				log.Printf("ERROR: failed to fetch %s: %v", ep, err)
-				gChan <- []game{}
+				gChan <- []Game{}
 				return
 			}
 
-			games := []game{}
+			games := []Game{}
 			for _, wrapper := range gamesPlayload.Events {
-				g := wrapper.game
+				g := wrapper.Game
 				//Extract playByPlay bool from nested obj
 				if len(wrapper.Competitions) > 0 {
 					g.PlayByPlay = wrapper.Competitions[0].PlayByPlayAvailable
@@ -148,7 +148,7 @@ func fetchSeasonGamesAsync(start time.Time, end time.Time) ([]game, error) {
 		close(gChan)
 	}()
 
-	mappedGames := [][]game{}
+	mappedGames := [][]Game{}
 	for games := range gChan {
 		mappedGames = append(mappedGames, games)
 	}
@@ -161,7 +161,7 @@ func dateToYYYYMMDD(d time.Time) string {
 	return d.Format("20060102")
 }
 
-func fetchPlaysAsync(games *[]game) error {
+func fetchPlaysAsync(games *[]Game) error {
 
 	type GameDataChannelDTO struct {
 		gameData gameDataFetchPayload
